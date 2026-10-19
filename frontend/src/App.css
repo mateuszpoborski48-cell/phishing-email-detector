@@ -1,0 +1,123 @@
+
+.app {
+  min-height: 100vh;
+  background: #0b1120;
+  color: #e2e8f0;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 8%;
+  background: #111c30;
+  border-bottom: 1px solid #263650;
+}
+
+.header h2 {
+  margin: 0;
+  color: #60a5fa;
+  font-size: 22px;
+}
+
+.header span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.main {
+  max-width: 850px;
+  margin: 70px auto;
+  padding: 0 20px 60px;
+}
+
+.main h1 {
+  text-align: center;
+  font-size: 38px;
+  margin-bottom: 15px;
+}
+
+.main > p {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 35px;
+}
+
+.scanner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #17243a;
+  padding: 35px;
+  border: 1px solid #30415c;
+  border-radius: 14px;
+}
+
+.scanner label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.scanner textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 15px;
+  background: #0b1120;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.scanner input[type="file"] {
+  padding: 12px;
+  background: #0b1120;
+  border-radius: 8px;
+  color: #cbd5e1;
+}
+
+.scanner button {
+  background: #2563eb;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.scanner button:hover {
+  background: #1d4ed8;
+}
+
+.result {
+  background: #123b32;
+  border: 1px solid #16a34a;
+  color: #86efac;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 18px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .main {
+    margin: 35px auto;
+  }
+
+  .main h1 {
+    font-size: 28px;
+  }
+
+  .scanner {
+    padding: 20px;
+  }
+}

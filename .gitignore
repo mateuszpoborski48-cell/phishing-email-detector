@@ -1,0 +1,33 @@
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node.js
+node_modules/
+dist/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Test emails and uploaded data
+*.eml
+*.msg
+uploads/
+scan_history.db
+*.sqlite
+*.sqlite3
+
+# Machine learning datasets and models
+ml/datasets/
+*.pkl
+*.joblib
+
+# Editor and operating system
+.vscode/
+.DS_Store
+Thumbs.db
