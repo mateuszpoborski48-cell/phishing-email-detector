@@ -8,6 +8,7 @@ function App() {
   const [message, setMessage] = useState("");
 
   
+
 async function handleScan(event) {
   event.preventDefault();
 
@@ -16,7 +17,7 @@ async function handleScan(event) {
     return;
   }
 
-  setMessage("Sending email for analysis...");
+  setMessage("Analysing email...");
 
   const formData = new FormData();
 
@@ -27,10 +28,13 @@ async function handleScan(event) {
   }
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/scan", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "http://127.0.0.1:8000/scan",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     const result = await response.json();
 
@@ -38,21 +42,26 @@ async function handleScan(event) {
       throw new Error(
         typeof result.detail === "string"
           ? result.detail
-          : "Unable to process email."
+          : "Unable to analyse email"
       );
     }
 
     setMessage(
-      `Email received successfully!
-      Subject: ${result.subject}
-      Sender: ${result.sender}
-      ${result.message}`
+      `Risk Level: ${result.risk_level}\n` +
+      `Risk Score: ${result.risk_score}/100\n` +
+      `Subject: ${result.subject}\n` +
+      `Sender: ${result.sender}\n\n` +
+      `Warnings:\n` +
+      (result.warnings.length
+        ? result.warnings.map(w => `• ${w}`).join("\n")
+        : "No suspicious indicators detected")
     );
 
   } catch (error) {
     setMessage(`Error: ${error.message}`);
   }
 }
+
 
 
   return (

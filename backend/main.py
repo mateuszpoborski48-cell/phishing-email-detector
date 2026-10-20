@@ -1,8 +1,9 @@
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from email import policy
-from email.parser import BytesParser
+from email.message import EmailMessage
+
+from risk_analyser import analyse_full_email
 
 app = FastAPI(title="Phishing Email Detector")
 
@@ -29,37 +30,44 @@ async def scan_email(
     email_file: UploadFile | None = File(default=None),
 ):
     if email_file is not None:
-        if not email_file.filename or not email_file.filename.lower().endswith(".eml"):
-            raise HTTPException(400, "Only .eml files are allowed")
+        if (
+            not email_file.filename
+            or not email_file.filename.lower().endswith(".eml")
+        ):
+            raise HTTPException(
+                400, "Only .eml files are allowed"
+            )
 
-        raw = await email_file.read(MAX_EMAIL_SIZE + 1)
+        raw_email = await email_file.read(MAX_EMAIL_SIZE + 1)
 
-        if len(raw) > MAX_EMAIL_SIZE:
-            raise HTTPException(413, "Email file is too large")
-
-        message = BytesParser(policy=policy.default).parsebytes(raw)
-
-        subject = str(message.get("Subject", ""))
-        sender = str(message.get("From", ""))
-
-        body_part = message.get_body(preferencelist=("plain",))
-        content = body_part.get_content() if body_part else ""
+        if len(raw_email) > MAX_EMAIL_SIZE:
+            raise HTTPException(
+                413, "Email file is too large"
+            )
 
     elif email_text and email_text.strip():
         if len(email_text.encode("utf-8")) > MAX_EMAIL_SIZE:
-            raise HTTPException(413, "Email text is too large")
+            raise HTTPException(
+                413, "Email text is too large"
+            )
 
-        subject = "Pasted email"
-        sender = "Not provided"
-        content = email_text
+        # Wrap pasted text in a basic email message.
+        message = EmailMessage()
+        message["From"] = "unknown@example.invalid"
+        message["Subject"] = "Pasted Email"
+        message.set_content(email_text)
+        raw_email = message.as_bytes()
 
     else:
-        raise HTTPException(400, "Please submit an email")
+        raise HTTPException(
+            400, "Please enter or upload an email"
+        )
 
-    return {
-        "status": "received",
-        "subject": subject,
-        "sender": sender,
-        "preview": content[:300],
-        "message": "Email received. Phishing detection coming in Week 2."
-    }
+    try:
+        result = analyse_full_email(raw_email)
+        return result
+
+    except Exception:
+        raise HTTPException(
+            400, "Unable to analyse this email"
+        )
