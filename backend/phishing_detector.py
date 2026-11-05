@@ -1,69 +1,30 @@
-
 import re
 
-# Suspicious patterns commonly found in phishing emails.
-# Each pattern has a warning message and a weight.
-
 PHISHING_PATTERNS = [
-    {
-        "pattern": r"\baccount (?:will be |has been )?(?:suspended|disabled|locked)\b",
-        "warning": "Threat of account suspension or locking",
-        "weight": 25,
-    },
-    {
-        "pattern": r"\b(?:verify|confirm|update)\s+(?:your\s+)?(?:password|credentials|account details)\b",
-        "warning": "Request to verify sensitive account information",
-        "weight": 30,
-    },
-    {
-        "pattern": r"\b(?:urgent|immediately|within 24 hours|act now)\b",
-        "warning": "Urgent or pressuring language",
-        "weight": 15,
-    },
-    {
-        "pattern": r"\b(?:banking details|credit card details|payment information)\b",
-        "warning": "Reference to sensitive financial information",
-        "weight": 20,
-    },
-    {
-        "pattern": r"\b(?:click here|click the link|follow this link)\b",
-        "warning": "Instruction to click a link",
-        "weight": 10,
-    },
+    (r"\b(?:account|profile|access|service)\b.{0,85}\b(?:suspend(?:ed|sion)?|disable(?:d)?|lock(?:ed|ing)?|terminat(?:ed|ion)|deactivat(?:ed|ion))\b|\b(?:suspend(?:ed|sion)?|disable(?:d)?|lock(?:ed|ing)?|terminat(?:ed|ion))\b.{0,85}\b(?:account|access)\b", "Threat of account suspension or locking", 25),
+    (r"\b(?:verify|confirm|update|provide|enter|submit|validate|re-enter)\b.{0,90}\b(?:password|credentials|account details|personal information|identity|login details)\b|\b(?:password|credentials)\b.{0,70}\b(?:verify|confirm|restore|prevent|access)\b", "Request for sensitive account information", 35),
+    (r"\b(?:urgent|immediately|act now|right away|within\s+\d+\s*(?:hours?|days?)|failure to act|last chance|final warning|as soon as possible)\b", "Urgent or pressuring language", 10),
+    (r"\b(?:banking details|bank account|credit card|debit card|payment information|financial details|card number)\b", "Reference to sensitive financial information", 25),
+    (r"\b(?:click here|click (?:on )?(?:the |this )?link|follow (?:this |the )?link|visit (?:the |this )?(?:link|website)|open (?:the |this )?link)\b", "Instruction to click a link", 10),
+    (r"\b(?:log\s*in|login|sign\s*in)\b.{0,70}\b(?:verify|restore|secure|unlock|confirm)\b|\b(?:verify|restore|secure|unlock)\b.{0,70}\b(?:log\s*in|login|sign\s*in)\b", "Request to log in for account verification", 25),
+    (r"\b(?:gift cards?|wire transfer|cryptocurrency payment|bitcoin payment|send money)\b", "Potential financial scam indicator", 25),
+    (r"\b(?:you have won|claim your prize|lottery winner|congratulations.{0,35}(?:won|prize))\b", "Suspicious prize or reward claim", 25),
 ]
 
 
 def analyse_email_content(email_text):
-    """
-    Analyse email text for common phishing indicators.
-
-    Returns a preliminary risk score and detected warnings.
-    """
-
     if not isinstance(email_text, str):
         raise ValueError("Email content must be text.")
 
     warnings = []
     score = 0
-
-    for item in PHISHING_PATTERNS:
-        if re.search(
-            item["pattern"],
-            email_text,
-            flags=re.IGNORECASE,
-        ):
-            warnings.append(item["warning"])
-            score += item["weight"]
+    for pattern, warning, weight in PHISHING_PATTERNS:
+        if re.search(pattern, email_text, flags=re.IGNORECASE | re.DOTALL):
+            warnings.append(warning)
+            score += weight
 
     score = min(score, 100)
-
-    if score >= 60:
-        risk_level = "High"
-    elif score >= 30:
-        risk_level = "Medium"
-    else:
-        risk_level = "Low"
-
+    risk_level = "High" if score >= 60 else "Medium" if score >= 30 else "Low"
     return {
         "risk_score": score,
         "risk_level": risk_level,

@@ -31,3 +31,23 @@ ml/datasets/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# SQLite database files
+backend/*.db
+backend/*.db-journal
+backend/*.db-shm
+backend/*.db-wal
+
+# Python virtual environment
+backend/.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
