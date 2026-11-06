@@ -417,3 +417,265 @@ input[type="file"] {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ==========================================
+   WEEK 4 - DATABASE EXPLORER
+   ========================================== */
+
+.database-explorer {
+  width: 100%;
+}
+
+/* Database statistics */
+
+.database-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.database-summary-item {
+  background: #19263d;
+  border: 1px solid #304360;
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.database-summary-item span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.database-summary-item strong {
+  font-size: 28px;
+}
+
+/* Search and filter controls */
+
+.database-controls {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 22px;
+  background: #19263d;
+  border: 1px solid #304360;
+  border-radius: 12px;
+}
+
+.database-control {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.database-control label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #cbd5e1;
+}
+
+.database-control input,
+.database-control select {
+  width: 100%;
+  min-width: 0;
+  padding: 13px;
+  background: #0b1220;
+  border: 1px solid #42536f;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.database-control input:focus,
+.database-control select:focus {
+  outline: 2px solid #2563eb;
+  border-color: #60a5fa;
+}
+
+.database-control input::placeholder {
+  color: #64748b;
+}
+
+/* Database table */
+
+.database-table-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.database-table-heading h3 {
+  margin: 0;
+}
+
+.database-table-heading span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.database-table {
+  min-width: 760px;
+}
+
+.database-table td {
+  vertical-align: top;
+}
+
+.database-table tbody tr:hover {
+  background: #20314d;
+}
+
+/* Details button */
+
+.details-button {
+  padding: 9px 13px;
+  background: #1e40af;
+  border: 1px solid #3b82f6;
+  border-radius: 7px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.details-button:hover {
+  background: #2563eb;
+}
+
+/* Expanded scan details */
+
+.database-details {
+  margin-top: 15px;
+  padding: 18px;
+  width: 280px;
+  max-width: 100%;
+  background: #0b1220;
+  border: 1px solid #304360;
+  border-radius: 10px;
+  color: #cbd5e1;
+  overflow-wrap: anywhere;
+}
+
+.database-details h4 {
+  color: #f8fafc;
+  margin: 0 0 14px;
+}
+
+.database-details p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.database-details ul {
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+.database-details li {
+  margin-bottom: 10px;
+  color: #fca5a5;
+}
+
+.database-empty {
+  padding: 30px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+/* Responsive design */
+
+@media (max-width: 750px) {
+  .database-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .database-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navigation {
+    flex-wrap: wrap;
+  }
+
+  .navigation button {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .database-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .database-controls {
+    padding: 15px;
+  }
+
+  .database-details {
+    width: 220px;
+  }
+}
+
+/* WEEK 4 - PHISHING EXPLANATIONS */
+
+.explanations-section {
+  margin-top: 28px;
+}
+
+.explanations-section h4 {
+  margin-bottom: 18px;
+}
+
+.explanation-card {
+  background: #0b1220;
+  border: 1px solid #304360;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.explanation-card h5 {
+  color: #fca5a5;
+  font-size: 16px;
+  margin: 0 0 14px;
+}
+
+.explanation-card p {
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin: 10px 0;
+}
+
+.explanation-card strong {
+  color: #f8fafc;
+}
+
+.recommendation-panel {
+  margin-top: 25px;
+  padding: 22px;
+  background: #111c30;
+  border: 2px solid;
+  border-radius: 12px;
+}
+
+.recommendation-panel h4 {
+  margin: 0 0 12px;
+  font-size: 19px;
+}
+
+.recommendation-panel p {
+  margin: 0;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
