@@ -147,14 +147,22 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      activeTab === "dashboard" ||
-      activeTab === "database"
-    ) {
-      loadDashboard();
-    }
-  }, [activeTab, loadDashboard]);
+
+useEffect(() => {
+  if (
+    activeTab !== "dashboard" &&
+    activeTab !== "database"
+  ) {
+    return;
+  }
+
+  const timeoutId = setTimeout(() => {
+    void loadDashboard();
+  }, 0);
+
+  return () => clearTimeout(timeoutId);
+}, [activeTab, loadDashboard]);
+
 
   // Scan an email
   async function handleScan(event) {
