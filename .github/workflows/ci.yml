@@ -35,6 +35,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Check frontend code quality
+        working-directory: frontend
+        run: npm run lint
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
