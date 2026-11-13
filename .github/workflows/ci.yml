@@ -18,28 +18,20 @@ jobs:
         with:
           python-version: '3.11'
 
-      
       - name: Install dependencies
         working-directory: backend
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
-
       - name: Run backend tests
         working-directory: backend
         run: python -m pytest -v
 
-  
   frontend-build:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Check frontend code quality
-        working-directory: frontend
-        run: npm run lint
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -58,6 +50,9 @@ jobs:
         working-directory: frontend
         run: npm run build
 
+      - name: Check frontend code quality
+        working-directory: frontend
+        run: npm run lint
 
   security-scan:
     runs-on: ubuntu-latest
@@ -79,4 +74,3 @@ jobs:
           python -m bandit -r backend \
             -x backend/.venv,backend/__pycache__,backend/.pytest_cache \
             -s B101 -ll
-
