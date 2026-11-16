@@ -253,3 +253,94 @@ http://micros0ft-support.example/verify-account
     assert "micros0ft-support.example" in result["sender"]
     assert result["risk_level"] == "High"
 
+
+# ==========================================
+# TEST - HTML-ONLY PHISHING EMAIL
+# ==========================================
+
+def test_html_only_phishing_email():
+    email = """From: Microsoft Security <security@micros0ft-support.example>
+To: student@example.com
+Subject: Urgent Account Verification
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html>
+<body>
+<p>Your account will be suspended immediately.</p>
+<p>Verify your password to avoid suspension.</p>
+<a href="http://micros0ft-support.example/verify-account">
+Verify Account
+</a>
+</body>
+</html>
+"""
+
+    result = analyse_full_email(email)
+
+    assert result["subject"] == "Urgent Account Verification"
+    assert result["risk_level"] == "High"
+    assert result["risk_score"] >= 60
+    assert len(result["warnings"]) > 0
+    assert any(
+        "http" in warning.lower()
+        for warning in result["warnings"]
+    )
+
+
+# ==========================================
+# TEST - MALFORMED EMAIL
+# ==========================================
+
+def test_malformed_email():
+    email = b"""
+This is not a properly formatted email.
+
+There is no sender or subject.
+Just some random text.
+"""
+
+    result = analyse_full_email(email)
+
+    assert result["subject"] == "Pasted Email"
+    assert result["sender"] == "Not available (pasted email)"
+    assert 0 <= result["risk_score"] <= 100
+    assert result["risk_level"] in ("Low", "Medium", "High")
+    assert isinstance(result["warnings"], list)
+
+
+# ==========================================
+# TEST - SUSPICIOUS EMAIL ATTACHMENT
+# ==========================================
+
+def test_suspicious_attachment():
+    email = """From: Unknown <sender@example.com>
+To: student@example.com
+Subject: Important Document
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="testboundary"
+
+--testboundary
+Content-Type: text/plain; charset=UTF-8
+
+Please see the attached document.
+
+--testboundary
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="invoice.exe"
+Content-Transfer-Encoding: base64
+
+dGVzdA==
+
+--testboundary--
+"""
+
+    result = analyse_full_email(email)
+
+    assert len(result["analysis"]["attachments"]["warnings"]) > 0
+    assert any(
+        "attachment" in warning.lower()
+        or "executable" in warning.lower()
+        or ".exe" in warning.lower()
+        for warning in result["warnings"]
+    )
