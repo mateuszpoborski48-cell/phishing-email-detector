@@ -24,7 +24,7 @@ def _prepare_email(raw_email):
         raise ValueError("Email must be text or bytes.")
 
     if isinstance(raw_email, bytes):
-        return raw_email
+        return raw_email.lstrip(b"\r\n")
 
     text = raw_email.replace("\r\n", "\n").replace("\r", "\n")
     text = text.lstrip("\n")

@@ -233,3 +233,23 @@ PayPal Customer Support
         for warning in result["warnings"]
     )
 
+
+def test_eml_with_leading_blank_lines():
+    from risk_analyser import analyse_full_email
+
+    email = b"""
+From: Microsoft Security <security@micros0ft-support.example>
+To: student@example.com
+Subject: Account Verification Required
+Content-Type: text/plain; charset=UTF-8
+
+Please verify your account immediately.
+http://micros0ft-support.example/verify-account
+"""
+
+    result = analyse_full_email(email)
+
+    assert result["subject"] == "Account Verification Required"
+    assert "micros0ft-support.example" in result["sender"]
+    assert result["risk_level"] == "High"
+
