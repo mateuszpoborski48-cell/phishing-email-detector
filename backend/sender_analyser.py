@@ -72,12 +72,12 @@ def analyse_sender(sender):
             continue
 
         domain_label = domain.split(".")[0]
+        domain_parts = domain_label.split("-")
 
-        similarity = SequenceMatcher(
-            None,
-            domain_label,
-            brand
-        ).ratio()
+        similarity = max(
+            SequenceMatcher(None, part, brand).ratio()
+            for part in domain_parts
+            )
 
         if brand in domain or similarity >= 0.75:
             warnings.append(

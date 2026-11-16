@@ -201,3 +201,35 @@ def test_risk_score_limit():
     result = analyse_full_email(email)
 
     assert 0 <= result["risk_score"] <= 100
+
+
+def test_subtle_paypal_impersonation():
+    email = """From: PayPal Support <billing@paypa1-account.example>
+To: student@example.com
+Subject: Payment Receipt Review
+
+Hello,
+
+Thank you for using PayPal.
+
+We have prepared a summary of your recent payment activity.
+Please review your transaction details.
+
+https://paypa1-account.example/account/review
+
+If everything looks correct, no further action is required.
+
+Kind regards,
+PayPal Customer Support
+"""
+
+    result = analyse_full_email(email)
+
+    assert result["risk_level"] == "High"
+    assert result["risk_score"] >= 60
+
+    assert any(
+        "paypal impersonation" in warning.lower()
+        for warning in result["warnings"]
+    )
+
